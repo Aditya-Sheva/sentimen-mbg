@@ -626,12 +626,15 @@ elif halaman == "Eksplorasi Data":
             with cb:
                 fig, ax = plt.subplots(figsize=(5,4), facecolor='none')
                 lo = [l for l in ['Negatif','Positif','Netral'] if l in df['label'].unique()]
-                bp = ax.boxplot([df[df['label']==l]['panjang'].values for l in lo],
-                                labels=lo, patch_artist=True,
-                                medianprops={'linewidth':2,'color':'white'},
-                                boxprops={'linewidth':1.5})
+                data_box = [df[df['label']==l]['panjang'].values for l in lo]
+                bp = ax.boxplot(data_box, labels=lo, patch_artist=True)
                 for patch, color in zip(bp['boxes'], COLORS):
-                    patch.set_facecolor(color); patch.set_alpha(0.75)
+                    patch.set_facecolor(color)
+                    patch.set_alpha(0.75)
+                    patch.set_linewidth(1.5)
+                for median in bp['medians']:
+                    median.set_color('white')
+                    median.set_linewidth(2)
                 ax.set_title('Panjang per Sentimen',fontweight='700',fontsize=13,pad=12)
                 ax.set_ylabel('Jumlah Karakter',fontsize=11)
                 plt.tight_layout()
