@@ -263,10 +263,27 @@ def preproc_bert(teks):
 
 def pred_ml(teks, models, tfidf, le):
     if not models or tfidf is None:
-        import random; random.seed(hash(teks)%1000)
-        lbl  = random.choice(['Positif','Negatif','Netral'])
-        conf = round(random.uniform(0.65,0.95),3)
-        return {n:{'label':lbl,'confidence':conf}
+        # Mode demo: gunakan keyword matching agar konsisten dengan pred_bert
+        t = str(teks).lower()
+        kata_negatif = ['gagal','buruk','jelek','kecewa','tidak layak','sia-sia',
+                        'basi','korupsi','pemborosan','tidak bergizi','parah',
+                        'percuma','masalah','bermasalah','tolak','hapus','hentikan',
+                        'sampah','tipu','nggak ada','ga ada','gak ada','tidak ada gizi']
+        kata_positif = ['bagus','baik','mantap','keren','setuju','dukung',
+                        'mendukung','senang','berguna','bermanfaat','lanjutkan',
+                        'berhasil','luar biasa','hebat','alhamdulillah']
+        skor_neg = sum(1 for k in kata_negatif if k in t)
+        skor_pos = sum(1 for k in kata_positif if k in t)
+        if skor_neg > skor_pos:
+            lbl = 'Negatif'
+            conf = min(0.68 + skor_neg * 0.05, 0.91)
+        elif skor_pos > skor_neg:
+            lbl = 'Positif'
+            conf = min(0.68 + skor_pos * 0.05, 0.91)
+        else:
+            lbl = 'Netral'
+            conf = 0.64
+        return {n:{'label':lbl,'confidence':round(conf,3)}
                 for n in ['Naive Bayes','Logistic Regression','SVM']}
     vec = tfidf.transform([preproc_ml(teks)])
     out = {}
@@ -280,13 +297,47 @@ def pred_ml(teks, models, tfidf, le):
 
 def pred_bert(teks, tok, model):
     if tok is None or model is None:
-        import random; random.seed(hash(teks)%999)
-        labels = ['Negatif','Netral','Positif']
-        raw    = sorted([random.random() for _ in range(3)])
-        total  = sum(raw); probs = [p/total for p in raw]
-        idx    = probs.index(max(probs))
-        return {'label':labels[idx],'confidence':round(max(probs),3),
-                'probs':dict(zip(labels,[round(p,3) for p in probs]))}
+        # Mode demo: gunakan keyword matching agar hasil lebih masuk akal
+        t = str(teks).lower()
+
+        kata_negatif = ['gagal','buruk','jelek','kecewa','tidak layak','sia-sia',
+                        'basi','korupsi','bohong','omong kosong','pemborosan',
+                        'tidak bergizi','tidak baik','parah','percuma','mubazir',
+                        'tidak ada','kurang','masalah','bermasalah','protes',
+                        'menolak','tolak','hapus','hentikan','stop','boikot',
+                        'sampah','zonk','tipu','prank','bohong','tidak layak',
+                        'nggak ada','ga ada','gak ada','ngga ada','tidak ada gizi']
+        kata_positif = ['bagus','baik','mantap','keren','setuju','dukung',
+                        'mendukung','terima kasih','alhamdulillah','senang',
+                        'program bagus','membantu','berguna','bermanfaat',
+                        'lanjutkan','teruskan','sukses','berhasil','positif',
+                        'baik sekali','sangat baik','luar biasa','hebat']
+
+        skor_neg = sum(1 for k in kata_negatif if k in t)
+        skor_pos = sum(1 for k in kata_positif if k in t)
+
+        if skor_neg > skor_pos:
+            # Negatif dominan
+            p_neg = min(0.55 + skor_neg * 0.08, 0.92)
+            sisa  = 1 - p_neg
+            probs = {'Negatif': round(p_neg, 3),
+                     'Netral' : round(sisa * 0.55, 3),
+                     'Positif': round(sisa * 0.45, 3)}
+            return {'label':'Negatif','confidence':probs['Negatif'],'probs':probs}
+        elif skor_pos > skor_neg:
+            # Positif dominan
+            p_pos = min(0.55 + skor_pos * 0.08, 0.92)
+            sisa  = 1 - p_pos
+            probs = {'Positif': round(p_pos, 3),
+                     'Netral' : round(sisa * 0.55, 3),
+                     'Negatif': round(sisa * 0.45, 3)}
+            return {'label':'Positif','confidence':probs['Positif'],'probs':probs}
+        else:
+            # Netral
+            probs = {'Netral':'0.512','Negatif':'0.271','Positif':'0.217'}
+            probs = {'Netral':0.512,'Negatif':0.271,'Positif':0.217}
+            return {'label':'Netral','confidence':0.512,'probs':probs}
+
     import torch
     inputs = tok(preproc_bert(teks),return_tensors='pt',
                  truncation=True,max_length=128,padding=True)
