@@ -779,24 +779,59 @@ elif halaman == "Perbandingan Model":
 
     st.markdown("---")
     st.subheader("Analisis Hasil")
-    ca,cb,cc = st.columns(3, gap="medium")
+    ca, cb, cc = st.columns(3, gap="medium")
+
     with ca:
-        with st.expander("Model terbaik?", expanded=True):
-            st.write("""**IndoBERT** unggul dengan Accuracy 82.42% dan F1 81.75%.
-            IndoBERT memahami konteks penuh kalimat karena di-pre-train dengan
-            miliaran teks Bahasa Indonesia — berbeda dengan TF-IDF yang hanya
-            menghitung frekuensi kata.""")
+        st.markdown("""
+<div style="background:white;border-radius:14px;padding:20px;
+            border:1px solid #E2E8F0;border-top:4px solid #6366F1;
+            box-shadow:0 1px 4px rgba(0,0,0,0.05);height:100%">
+  <div style="font-size:13px;font-weight:700;color:#6366F1;margin-bottom:10px">
+    🏆 Model terbaik?
+  </div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">
+    <strong>IndoBERT</strong> unggul dengan Accuracy <strong>82.42%</strong>
+    dan F1-score <strong>81.75%</strong>. IndoBERT memahami konteks penuh
+    kalimat karena di-pre-train dengan miliaran teks Bahasa Indonesia,
+    berbeda dengan TF-IDF yang hanya menghitung frekuensi kata.
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
     with cb:
-        with st.expander("Transformer selalu lebih baik?"):
-            st.write("""**Tidak selalu.** Dalam kasus ini IndoBERT unggul +11.17%.
-            Namun pada data sangat sedikit (< 500), ML Klasik bisa bersaing
-            karena Transformer membutuhkan lebih banyak data untuk fine-tuning optimal.""")
+        st.markdown("""
+<div style="background:white;border-radius:14px;padding:20px;
+            border:1px solid #E2E8F0;border-top:4px solid #F59E0B;
+            box-shadow:0 1px 4px rgba(0,0,0,0.05);height:100%">
+  <div style="font-size:13px;font-weight:700;color:#D97706;margin-bottom:10px">
+    💡 Transformer selalu lebih baik?
+  </div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">
+    <strong>Tidak selalu.</strong> Dalam kasus ini IndoBERT unggul
+    <strong>+11.17%</strong>. Namun pada data yang sangat sedikit
+    (&lt; 500 data), ML Klasik bisa bersaing karena Transformer membutuhkan
+    lebih banyak data untuk fine-tuning yang optimal.
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
     with cc:
-        with st.expander("Kalimat yang sering salah?"):
-            st.write("""**Positif ke Negatif (35 kasus):** kalimat dukungan dengan
-            kata kritik konstruktif. **Netral ke Negatif (29 kasus):** pertanyaan
-            informatif dengan kata negatif secara leksikal.
-            **Sarkasme (14 kasus):** sulit dideteksi semua model.""")
+        st.markdown("""
+<div style="background:white;border-radius:14px;padding:20px;
+            border:1px solid #E2E8F0;border-top:4px solid #F43F5E;
+            box-shadow:0 1px 4px rgba(0,0,0,0.05);height:100%">
+  <div style="font-size:13px;font-weight:700;color:#E11D48;margin-bottom:10px">
+    ❌ Kalimat yang sering salah?
+  </div>
+  <div style="font-size:13px;color:#475569;line-height:1.7">
+    <strong>Positif ke Negatif (35 kasus):</strong> kalimat dukungan dengan
+    kata kritik konstruktif.<br><br>
+    <strong>Netral ke Negatif (29 kasus):</strong> pertanyaan informatif
+    dengan kata negatif secara leksikal.<br><br>
+    <strong>Sarkasme (14 kasus):</strong> sulit dideteksi semua model.
+  </div>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ================================================================
