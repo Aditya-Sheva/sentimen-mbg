@@ -23,7 +23,7 @@ def inject_css():
     css = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-@import url('https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css');
+
 
 * { font-family: 'Inter', sans-serif !important; box-sizing: border-box; }
 
@@ -131,7 +131,7 @@ def section_title(icon_cls, title):
     return f"""<div style="font-size:15px;font-weight:700;color:#0F172A;
         margin-bottom:16px;display:flex;align-items:center;gap:8px;
         padding-bottom:10px;border-bottom:1px solid #F1F5F9">
-        <i class="{icon_cls}" style="color:#6366F1;font-size:18px"></i>{title}</div>"""
+        •{title}</div>"""
 
 
 def stat_card(icon_cls, icon_bg, icon_color, val, label, sub):
@@ -143,7 +143,7 @@ def stat_card(icon_cls, icon_bg, icon_color, val, label, sub):
   <div style="width:44px;height:44px;border-radius:12px;background:{icon_bg};
               color:{icon_color};display:flex;align-items:center;
               justify-content:center;font-size:20px;flex-shrink:0">
-    <i class="{icon_cls}"></i>
+    •
   </div>
   <div>
     <div style="font-size:22px;font-weight:800;color:#0F172A;line-height:1">{val}</div>
@@ -155,15 +155,15 @@ def stat_card(icon_cls, icon_bg, icon_color, val, label, sub):
 
 def result_card(label, conf, probs=None):
     cfg = {
-        'Positif': ('#F0FDF4','#22C55E','#15803D','ti ti-mood-happy'),
-        'Negatif': ('#FFF1F2','#F43F5E','#BE123C','ti ti-mood-angry'),
-        'Netral':  ('#EFF6FF','#3B82F6','#1D4ED8','ti ti-mood-neutral'),
+        'Positif': ('#F0FDF4','#22C55E','#15803D','😊'),
+        'Negatif': ('#FFF1F2','#F43F5E','#BE123C','😠'),
+        'Netral':  ('#EFF6FF','#3B82F6','#1D4ED8','😐'),
     }
-    bg, border, text, icon = cfg.get(label, ('#F8FAFC','#94A3B8','#334155','ti ti-help'))
+    bg, border, text, icon = cfg.get(label, ('#F8FAFC','#94A3B8','#334155','❓'))
     return f"""
 <div style="background:{bg};border:2px solid {border};border-radius:16px;
             padding:24px;text-align:center">
-  <i class="{icon}" style="font-size:52px;color:{border}"></i>
+  •
   <div style="font-size:28px;font-weight:800;color:{text};margin:8px 0">{label}</div>
   <div style="font-size:13px;color:#475569">Confidence: <strong>{conf*100:.1f}%</strong></div>
 </div>"""
@@ -171,18 +171,18 @@ def result_card(label, conf, probs=None):
 
 def ml_card(nama, label, conf):
     cfg = {
-        'Positif': ('#22C55E','#15803D','ti ti-mood-happy'),
-        'Negatif': ('#F43F5E','#BE123C','ti ti-mood-angry'),
-        'Netral':  ('#3B82F6','#1D4ED8','ti ti-mood-neutral'),
+        'Positif': ('#22C55E','#15803D','😊'),
+        'Negatif': ('#F43F5E','#BE123C','😠'),
+        'Netral':  ('#3B82F6','#1D4ED8','😐'),
     }
-    border, text, icon = cfg.get(label, ('#94A3B8','#334155','ti ti-help'))
+    border, text, icon = cfg.get(label, ('#94A3B8','#334155','❓'))
     conf_html = f'<div style="font-size:11px;color:#94A3B8;margin-top:4px">conf: {conf*100:.1f}%</div>' if conf > 0 else ''
     return f"""
 <div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:14px;
             padding:18px 16px;text-align:center;border-top:4px solid {border}">
   <div style="font-size:10px;color:#64748B;font-weight:700;text-transform:uppercase;
               letter-spacing:0.06em;margin-bottom:10px">{nama}</div>
-  <i class="{icon}" style="font-size:36px;color:{border}"></i>
+  •
   <div style="font-size:17px;font-weight:700;color:{text};margin-top:8px">{label}</div>
   {conf_html}
 </div>"""
@@ -312,7 +312,7 @@ with st.sidebar:
   <div style="width:54px;height:54px;background:linear-gradient(135deg,#6366F1,#8B5CF6);
               border-radius:16px;display:flex;align-items:center;justify-content:center;
               margin:0 auto 12px">
-    <i class="ti ti-bowl" style="font-size:26px;color:white"></i>
+    🍱
   </div>
   <div style="font-size:18px;font-weight:800;color:white">SentiMBG</div>
   <div style="font-size:12px;color:#475569;margin-top:3px">Analisis Sentimen YouTube</div>
@@ -339,7 +339,7 @@ with st.sidebar:
 <div style="margin-top:12px;padding:10px 14px;background:rgba(34,197,94,0.08);
             border-radius:10px;border:1px solid rgba(34,197,94,0.2)">
   <div style="font-size:12px;color:#4ADE80;font-weight:600">
-    <i class="ti ti-school"></i> Proyek Akhir Text Mining
+    🏫 Proyek Akhir Text Mining
   </div>
   <div style="font-size:11px;color:#475569;margin-top:3px">Universitas Sebelas Maret</div>
 </div>
@@ -358,10 +358,10 @@ if halaman == "Beranda":
 
     c1,c2,c3,c4 = st.columns(4, gap="medium")
     cards = [
-        ("ti ti-database","#EDE9FE","#7C3AED","1.734","Total Komentar","12 video YouTube"),
-        ("ti ti-mood-angry","#FEE2E2","#DC2626","76.4%","Sentimen Negatif","1.324 komentar"),
-        ("ti ti-trophy","#DCFCE7","#16A34A","82.42%","Akurasi Terbaik","IndoBERT Transformer"),
-        ("ti ti-brain","#DBEAFE","#2563EB","4 Model","Dibandingkan","NB, LR, SVM, IndoBERT"),
+        ("🗄️","#EDE9FE","#7C3AED","1.734","Total Komentar","12 video YouTube"),
+        ("😠","#FEE2E2","#DC2626","76.4%","Sentimen Negatif","1.324 komentar"),
+        ("🏆","#DCFCE7","#16A34A","82.42%","Akurasi Terbaik","IndoBERT Transformer"),
+        ("🧠","#DBEAFE","#2563EB","4 Model","Dibandingkan","NB, LR, SVM, IndoBERT"),
     ]
     for col, (ico,bg,clr,val,lbl,sub) in zip([c1,c2,c3,c4], cards):
         with col:
@@ -372,13 +372,13 @@ if halaman == "Beranda":
 
     with col_a:
         card(
-            section_title("ti ti-info-circle","Tentang Program MBG") +
+            section_title("ℹ️","Tentang Program MBG") +
             """<p style="color:#475569;font-size:14px;line-height:1.75;margin:0 0 16px">
             Program <strong>Makan Bergizi Gratis (MBG)</strong> adalah kebijakan unggulan
             pemerintahan Presiden Prabowo Subianto yang menyediakan makanan bergizi gratis
             bagi siswa sekolah di seluruh Indonesia. Program ini menjadi salah satu topik
             paling ramai diperbincangkan di media sosial sejak diluncurkan.</p>""" +
-            section_title("ti ti-target","Tujuan Penelitian") +
+            section_title("🎯","Tujuan Penelitian") +
             """<p style="color:#475569;font-size:14px;line-height:1.75;margin:0">
             Membandingkan performa <strong>Machine Learning Klasik</strong> (Naive Bayes,
             Logistic Regression, SVM) dengan <strong>Transformer</strong> (IndoBERT)
@@ -387,7 +387,7 @@ if halaman == "Beranda":
         )
 
         card(
-            section_title("ti ti-chart-bar","Hasil Perbandingan Model") +
+            section_title("📈","Hasil Perbandingan Model") +
             """<table style="width:100%;border-collapse:collapse;font-size:13px">
             <tr style="background:#0F172A;color:white">
               <th style="padding:10px 14px;text-align:left;border-radius:8px 0 0 0">Model</th>
@@ -440,13 +440,13 @@ if halaman == "Beranda":
                   ncol=1,fontsize=11,frameon=False)
         plt.tight_layout()
 
-        card(section_title("ti ti-chart-pie","Distribusi Sentimen"))
+        card(section_title("📊","Distribusi Sentimen"))
         st.pyplot(fig, use_container_width=True)
         plt.close()
 
         st.markdown("<br>", unsafe_allow_html=True)
         card(
-            section_title("ti ti-bolt","Coba Prediksi") +
+            section_title("⚡","Coba Prediksi") +
             "<p style='font-size:13px;color:#64748B;margin:0 0 10px'>Ketik komentar MBG untuk prediksi cepat</p>"
         )
         teks_h = st.text_area("", placeholder="Contoh: Program MBG sangat membantu...",
@@ -561,12 +561,12 @@ elif halaman == "Eksplorasi Data":
 
         c1,c2,c3,c4 = st.columns(4, gap="medium")
         for col, (ico,bg,clr,val,lbl,sub) in zip([c1,c2,c3,c4],[
-            ("ti ti-database","#EDE9FE","#7C3AED",f"{len(df):,}","Total Data","komentar berlabel"),
-            ("ti ti-mood-angry","#FEE2E2","#DC2626",f"{lc.get('Negatif',0):,}","Negatif",
+            ("🗄️","#EDE9FE","#7C3AED",f"{len(df):,}","Total Data","komentar berlabel"),
+            ("😠","#FEE2E2","#DC2626",f"{lc.get('Negatif',0):,}","Negatif",
              f"{lc.get('Negatif',0)/len(df)*100:.1f}%"),
-            ("ti ti-mood-happy","#DCFCE7","#16A34A",f"{lc.get('Positif',0):,}","Positif",
+            ("😊","#DCFCE7","#16A34A",f"{lc.get('Positif',0):,}","Positif",
              f"{lc.get('Positif',0)/len(df)*100:.1f}%"),
-            ("ti ti-mood-neutral","#DBEAFE","#2563EB",f"{lc.get('Netral',0):,}","Netral",
+            ("😐","#DBEAFE","#2563EB",f"{lc.get('Netral',0):,}","Netral",
              f"{lc.get('Netral',0)/len(df)*100:.1f}%"),
         ]):
             with col:
@@ -697,10 +697,10 @@ elif halaman == "Perbandingan Model":
 
     c1,c2,c3,c4 = st.columns(4, gap="medium")
     for col, (ico,bg,clr,val,lbl,sub) in zip([c1,c2,c3,c4],[
-        ("ti ti-trophy","#DCFCE7","#16A34A","82.42%","Akurasi Terbaik","IndoBERT"),
-        ("ti ti-chart-line","#EDE9FE","#7C3AED","81.75%","F1-score Terbaik","IndoBERT"),
-        ("ti ti-trending-up","#DBEAFE","#2563EB","+11.17%","Selisih F1","vs ML Klasik"),
-        ("ti ti-x","#FEE2E2","#DC2626","25.9%","Error Rate","90 dari 347 test"),
+        ("🏆","#DCFCE7","#16A34A","82.42%","Akurasi Terbaik","IndoBERT"),
+        ("📉","#EDE9FE","#7C3AED","81.75%","F1-score Terbaik","IndoBERT"),
+        ("📈","#DBEAFE","#2563EB","+11.17%","Selisih F1","vs ML Klasik"),
+        ("❌","#FEE2E2","#DC2626","25.9%","Error Rate","90 dari 347 test"),
     ]):
         with col:
             st.markdown(stat_card(ico,bg,clr,val,lbl,sub), unsafe_allow_html=True)
@@ -728,7 +728,7 @@ elif halaman == "Perbandingan Model":
                          color:{clr}">{row['F1-score']:.4f}</td>
             </tr>"""
 
-        card(section_title("ti ti-table","Tabel Perbandingan") + f"""
+        card(section_title("📋","Tabel Perbandingan") + f"""
 <table style="width:100%;border-collapse:collapse;font-size:13px">
 <tr style="background:#0F172A;color:white">
   <th style="padding:11px 14px;text-align:left;border-radius:8px 0 0 0">Model</th>
@@ -740,7 +740,7 @@ elif halaman == "Perbandingan Model":
 {rows_html}
 </table>
 <div style="font-size:12px;color:#64748B;margin-top:10px">
-  <i class="ti ti-star" style="color:#F59E0B"></i> Baris hijau = IndoBERT (model terbaik)
+  ⭐ Baris hijau = IndoBERT (model terbaik)
 </div>""")
 
     with cc:
@@ -823,7 +823,7 @@ elif halaman == "Tentang Proyek":
   <div style="width:64px;height:64px;background:linear-gradient(135deg,#6366F1,#8B5CF6);
               border-radius:50%;display:flex;align-items:center;justify-content:center;
               margin:0 auto 14px">
-    <i class="ti ti-user" style="font-size:28px;color:white"></i>
+    👤
   </div>
   <div style="font-weight:700;color:#0F172A;font-size:15px;margin-bottom:8px">{nama}</div>
   <div style="font-size:13px;color:#6366F1;font-weight:600;background:#EDE9FE;
@@ -836,28 +836,28 @@ elif halaman == "Tentang Proyek":
 
     with ca:
         steps = [
-            ("ti ti-download","1. Pengumpulan Data",
+            ("⬇️","1. Pengumpulan Data",
              "Scraping komentar YouTube menggunakan youtube-comment-downloader dari 12 video berita MBG tanpa API key."),
-            ("ti ti-tag","2. Pelabelan Data",
+            ("🏷️","2. Pelabelan Data",
              "Auto-labeling menggunakan model w11wo/indonesian-roberta-base-sentiment-classifier (pseudo-labeling)."),
-            ("ti ti-filter","3. Preprocessing ML",
+            ("🔧","3. Preprocessing ML",
              "Case folding → hapus URL/mention → tokenisasi → stopword removal → stemming (PySastrawi)."),
-            ("ti ti-math","4. Feature Extraction",
+            ("➕","4. Feature Extraction",
              "TF-IDF: max 5.000 fitur, n-gram (1,2), min_df=2. Split 80% train / 20% test."),
-            ("ti ti-robot","5. Training ML Klasik",
+            ("🤖","5. Training ML Klasik",
              "Naive Bayes (alpha=0.1), Logistic Regression (C=1.0), LinearSVC (C=1.0)."),
-            ("ti ti-brain","6. Fine-tuning IndoBERT",
+            ("🧠","6. Fine-tuning IndoBERT",
              "indobenchmark/indobert-base-p1, 3 epoch, batch size 16, lr=2e-5, GPU Tesla T4."),
-            ("ti ti-chart-bar","7. Evaluasi",
+            ("📈","7. Evaluasi",
              "Accuracy, Precision, Recall, F1-score (weighted), Confusion Matrix, Error Analysis."),
         ]
-        html_steps = section_title("ti ti-list-details","Metodologi Penelitian")
+        html_steps = section_title("📋","Metodologi Penelitian")
         for ico, judul, desk in steps:
             html_steps += f"""
 <div style="display:flex;gap:14px;margin-bottom:14px;align-items:flex-start">
   <div style="width:36px;height:36px;background:#EDE9FE;border-radius:10px;
               display:flex;align-items:center;justify-content:center;
-              flex-shrink:0;color:#7C3AED;font-size:18px"><i class="{ico}"></i></div>
+              flex-shrink:0;color:#7C3AED;font-size:18px">•</div>
   <div>
     <div style="font-weight:700;color:#0F172A;font-size:14px;margin-bottom:2px">{judul}</div>
     <div style="font-size:13px;color:#64748B;line-height:1.6">{desk}</div>
@@ -867,34 +867,34 @@ elif halaman == "Tentang Proyek":
 
     with cb:
         info_items = [
-            ("ti ti-school","Institusi","Universitas Sebelas Maret"),
-            ("ti ti-book","Mata Kuliah","Text Mining"),
-            ("ti ti-file-description","Tugas","Proyek Akhir UAS"),
-            ("ti ti-bowl","Topik","Program MBG"),
-            ("ti ti-brand-youtube","Platform","YouTube"),
-            ("ti ti-database","Total Data","1.734 komentar"),
-            ("ti ti-calendar","Tahun","2025/2026"),
+            ("🏫","Institusi","Universitas Sebelas Maret"),
+            ("📚","Mata Kuliah","Text Mining"),
+            ("📄","Tugas","Proyek Akhir UAS"),
+            ("🍱","Topik","Program MBG"),
+            ("▶️","Platform","YouTube"),
+            ("🗄️","Total Data","1.734 komentar"),
+            ("📅","Tahun","2025/2026"),
         ]
-        info_html = section_title("ti ti-info-circle","Informasi Proyek")
+        info_html = section_title("ℹ️","Informasi Proyek")
         for ico, lbl, val in info_items:
             info_html += f"""
 <div style="display:flex;justify-content:space-between;align-items:center;
             padding:9px 0;border-bottom:1px solid #F1F5F9;font-size:13px">
   <span style="color:#64748B;display:flex;align-items:center;gap:6px">
-    <i class="{ico}" style="color:#6366F1;font-size:16px"></i>{lbl}
+    •{lbl}
   </span>
   <span style="font-weight:600;color:#0F172A">{val}</span>
 </div>"""
         card(info_html)
 
-        hasil_html = section_title("ti ti-award","Hasil Akhir")
+        hasil_html = section_title("🥇","Hasil Akhir")
         for nm, f1, is_best in [("Naive Bayes","70.51%",False),
                                   ("Logistic Regression","70.58%",False),
                                   ("SVM","70.58%",False),
                                   ("IndoBERT","81.75%",True)]:
             bg  = '#F0FDF4' if is_best else 'transparent'
             clr = '#15803D' if is_best else '#334155'
-            star = '<i class="ti ti-trophy" style="color:#F59E0B;margin-right:6px"></i>' if is_best else ''
+            star = '🏆' if is_best else ''
             hasil_html += f"""
 <div style="display:flex;justify-content:space-between;align-items:center;
             padding:8px 12px;border-radius:8px;background:{bg};
