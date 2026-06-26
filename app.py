@@ -626,17 +626,23 @@ elif halaman == "Eksplorasi Data":
             with cb:
                 fig, ax = plt.subplots(figsize=(5,4), facecolor='none')
                 lo = [l for l in ['Negatif','Positif','Netral'] if l in df['label'].unique()]
-                data_box = [df[df['label']==l]['panjang'].values for l in lo]
-                bp = ax.boxplot(data_box, labels=lo, patch_artist=True)
-                for patch, color in zip(bp['boxes'], COLORS):
-                    patch.set_facecolor(color)
-                    patch.set_alpha(0.75)
-                    patch.set_linewidth(1.5)
-                for median in bp['medians']:
-                    median.set_color('white')
-                    median.set_linewidth(2)
-                ax.set_title('Panjang per Sentimen',fontweight='700',fontsize=13,pad=12)
-                ax.set_ylabel('Jumlah Karakter',fontsize=11)
+                means   = [df[df['label']==l]['panjang'].mean()   for l in lo]
+                medians = [df[df['label']==l]['panjang'].median() for l in lo]
+                x = np.arange(len(lo))
+                w = 0.35
+                b1 = ax.bar(x - w/2, means,   w, label='Rata-rata', color=COLORS[:len(lo)], alpha=0.85, edgecolor='white')
+                b2 = ax.bar(x + w/2, medians, w, label='Median',    color=COLORS[:len(lo)], alpha=0.45, edgecolor='white')
+                for bar, v in zip(b1, means):
+                    ax.text(bar.get_x()+bar.get_width()/2, bar.get_height()+2,
+                            f'{v:.0f}', ha='center', fontsize=9, fontweight='600')
+                for bar, v in zip(b2, medians):
+                    ax.text(bar.get_x()+bar.get_width()/2, bar.get_height()+2,
+                            f'{v:.0f}', ha='center', fontsize=9, fontweight='600')
+                ax.set_xticks(x)
+                ax.set_xticklabels(lo)
+                ax.set_title('Rata-rata & Median Panjang per Sentimen', fontweight='700', fontsize=12, pad=12)
+                ax.set_ylabel('Jumlah Karakter', fontsize=11)
+                ax.legend(fontsize=10, frameon=False)
                 plt.tight_layout()
                 st.pyplot(fig); plt.close()
 
